@@ -10,7 +10,7 @@ and database where practical.
 **I want** to create and list my categories  
 **So that** I can organize entries using my own vocabulary
 
-**Dependencies:** LS-004, LS-005
+**Dependencies:** LS-004, LS-005A
 
 ### Acceptance criteria
 

@@ -100,6 +100,8 @@ The planned implementation uses:
   authentication library.
 - **OpenTelemetry and Datadog** for logs, metrics, distributed traces, dashboards,
   monitors, and deployment correlation.
+- **SonarQube Cloud** for static analysis, security findings, code-quality metrics,
+  pull-request feedback, and the required Quality Gate.
 - **GitHub Actions** for build, test, migration validation, image publication, and
   controlled releases.
 
@@ -167,6 +169,10 @@ finish, flushes telemetry, and closes its PostgreSQL connection pool.
 - Repository integration tests run against real PostgreSQL and validate migrations,
   constraints, owner isolation, and queries.
 - HTTP tests cover successful responses and error contracts.
+- CI produces native Go test and coverage reports and imports them into SonarQube
+  Cloud; SonarQube reports coverage but does not replace test execution.
+- The SonarQube Cloud Quality Gate evaluates new code and must pass before changes can
+  be merged or a release image can be published.
 - External dependencies such as Keycloak and Datadog are replaced with controlled test
   doubles or local test endpoints; tests do not send data to real external accounts.
 
@@ -175,7 +181,7 @@ finish, flushes telemetry, and closes its PostgreSQL connection pool.
 Implementation is split into four epics:
 
 1. [Service Foundation](architecture/01-foundation.md) — Go scaffold, lifecycle,
-   PostgreSQL, migrations, CI, and container image.
+   PostgreSQL, migrations, CI, SonarQube Cloud, and container image.
 2. [Core Ledger](architecture/02-core-ledger.md) — categories and entry management.
 3. [Ledger Insights](architecture/03-insights.md) — monthly summaries, breakdowns, and
    comparisons.
