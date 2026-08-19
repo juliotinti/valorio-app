@@ -130,6 +130,51 @@ Run the documented bootstrap commands from a clean clone with only Go installed.
 
 ---
 
+## LS-005A — Integrate SonarQube Cloud code quality analysis
+
+**As a** maintainer<br>
+**I want** automated SonarQube Cloud analysis for the ledger-service<br>
+**So that** code quality and security issues are detected before changes are merged
+
+**Dependencies:** LS-005
+
+### Acceptance criteria
+
+- [ ] The repository is connected to a SonarQube Cloud organization and has a stable,
+      documented project key for `ledger-service`.
+- [ ] A version-controlled `sonar-project.properties` file defines the project base,
+      source and test locations, Go coverage report path, and narrowly justified
+      exclusions.
+- [ ] CI generates Go test execution and coverage reports before analysis; coverage is
+      imported with `sonar.go.coverage.reportPaths` and test execution data with
+      `sonar.go.tests.reportPaths`.
+- [ ] SonarQube Cloud analyzes bugs, vulnerabilities, security hotspots, code smells,
+      duplicated code, and coverage for changed Go code.
+- [ ] Pull requests that change `ledger-service` or a relevant shared dependency run
+      SonarQube Cloud analysis and receive analysis status or decoration in GitHub.
+- [ ] The SonarQube Cloud Quality Gate is a required check and blocks merging when it
+      fails or when analysis does not complete successfully.
+- [ ] The initial Quality Gate evaluates new code, avoiding arbitrary coverage debt
+      from unrelated, generated, or pre-existing content.
+- [ ] Generated files, vendored dependencies, migrations, and fixtures are excluded
+      only when the exclusion is explicit and documented; production Go code is not
+      hidden from analysis to improve metrics.
+- [ ] `SONAR_TOKEN` is stored only as a GitHub Actions secret. The organization key,
+      project key, and SonarQube Cloud URL are non-secret configuration and no
+      credentials are committed or printed in logs.
+- [ ] The CI workflow uses pinned or reviewed SonarSource actions/scanner versions and
+      grants only the permissions needed for checkout and pull-request analysis.
+- [ ] The README documents how to run tests and generate the local coverage report;
+      developers are not required to run a local SonarQube server.
+
+### Verification
+
+Open a pull request with a ledger-service change and verify that test results and Go
+coverage reach SonarQube Cloud, the analysis appears on the pull request, and a failing
+Quality Gate prevents merge.
+
+---
+
 ## LS-006 — Package the service as a secure container
 
 **As an** operator  

@@ -187,10 +187,12 @@ Kubernetes. These stories harden the service; they do not expand financial scope
 **I want** traceable image publication and deployment controls  
 **So that** every running version can be reproduced and rolled back safely
 
-**Dependencies:** LS-005, LS-006, LS-017, LS-021
+**Dependencies:** LS-005A, LS-006, LS-017, LS-021
 
 ### Acceptance criteria
 
+- [ ] Image publication and deployment can start only after the SonarQube Cloud
+      Quality Gate and all other required CI checks pass.
 - [ ] A successful merge to `main` publishes the affected ledger image to GHCR using
       the commit SHA; deployment manifests never rely on `latest`.
 - [ ] A successful deployment sends a Datadog deployment marker containing

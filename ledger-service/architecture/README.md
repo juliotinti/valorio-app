@@ -27,6 +27,8 @@ financial views without mixing currencies.
 - Datadog is the observability backend for logs, metrics, traces, dashboards, and
   monitors. The application emits OpenTelemetry-compatible telemetry to the local
   Datadog Agent so domain code remains independent from the vendor backend.
+- SonarQube Cloud is the managed static-analysis platform. Its Quality Gate evaluates
+  new code in CI and no self-hosted SonarQube deployment is part of this service.
 - The expected scale is one or two users and tens of thousands, not millions, of
   entries. No sharding, read replicas, or event streaming is required for the first
   release.
@@ -35,7 +37,7 @@ financial views without mixing currencies.
 
 | Order | Epic | Outcome | Stories |
 |---:|---|---|---|
-| 1 | [Foundation](01-foundation.md) | A buildable, testable, containerized service with CI and a migrated database | LS-001–LS-006 |
+| 1 | [Foundation](01-foundation.md) | A buildable, tested, analyzed, containerized service with CI and a migrated database | LS-001–LS-006 |
 | 2 | [Core ledger](02-core-ledger.md) | Categories and ledger entries can be managed safely | LS-007–LS-013 |
 | 3 | [Insights](03-insights.md) | Monthly totals and comparisons are available | LS-014–LS-016 |
 | 4 | [Operational readiness](04-operational-readiness.md) | The service is observable, secure, deployable, and documented | LS-017–LS-022 |
