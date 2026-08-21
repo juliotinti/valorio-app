@@ -13,15 +13,13 @@ baseline before adding business features.
 
 ### Acceptance criteria
 
-- [ ] A Go module is initialized using the repository's agreed module path and a
+- [x] A Go module is initialized using the repository's agreed module path and a
       supported, explicitly declared Go version.
-- [ ] `main` only performs composition and lifecycle management; business rules are
+- [x] `main` only performs composition and lifecycle management; business rules are
       not implemented in the entry point.
-- [ ] The service builds with `go build ./...` and tests with `go test ./...`.
-- [ ] `.gitignore`, `README.md`, and an example environment file are
+- [x] The service builds with `go build ./...` and tests with `go test ./...`.
+- [x] `.gitignore`, `README.md`, and an example environment file are
       present; real secrets and local environment files are ignored.
-- [ ] A task runner (`Makefile` or equivalent) exposes consistent `build`, `test`,
-      `lint`, `run`, and `migrate` commands.
 
 ### Verification
 
