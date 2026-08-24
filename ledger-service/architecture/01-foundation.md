@@ -37,16 +37,16 @@ Run the documented bootstrap commands from a clean clone with only Go installed.
 
 ### Acceptance criteria
 
-- [ ] Configuration is read from environment variables and includes HTTP address,
+- [x] Configuration is read from environment variables and includes HTTP address,
       log level, environment, shutdown timeout, service name, and service version.
-- [ ] Optional values have documented, safe local defaults.
-- [ ] Required values are validated at startup with actionable errors that do not
+- [x] Optional values have documented, safe local defaults.
+- [x] Required values are validated at startup with actionable errors that do not
       expose secret values.
-- [ ] The HTTP server defines explicit read-header, read, write, and idle timeouts.
-- [ ] The process handles `SIGINT` and `SIGTERM`.
-- [ ] On shutdown, the server stops accepting new requests and gives in-flight
+- [x] The HTTP server defines explicit read-header, read, write, and idle timeouts.
+- [x] The process handles `SIGINT` and `SIGTERM`.
+- [x] On shutdown, the server stops accepting new requests and gives in-flight
       requests a bounded period to finish.
-- [ ] Unit tests cover valid, missing, malformed, and unsafe configuration.
+- [x] Unit tests cover valid, missing, malformed, and unsafe configuration.
 
 ---
 
