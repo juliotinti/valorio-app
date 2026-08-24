@@ -163,6 +163,30 @@ Startup validates configuration before accepting traffic. On `SIGINT` or `SIGTER
 the service stops accepting new requests, gives in-flight requests a bounded period to
 finish, flushes telemetry, and closes its PostgreSQL connection pool.
 
+### Configuration
+
+Configuration is read from environment variables at startup. `SERVICE_NAME` and
+`SERVICE_VERSION` are required. All other values are optional and use the safe local
+defaults below when unset; every default can be overridden through its environment
+variable.
+
+|          Variable          | Default  |                      Validation                            |
+|----------------------------|----------|------------------------------------------------------------|
+| `SERVICE_NAME`             | required | Single-line identifier, at most 128 characters             |
+| `SERVICE_VERSION`          | required | Single-line identifier, at most 128 characters             |
+| `HTTP_ADDRESS`             | `localhost:8080`  | `host:port`, with port 1–65535                    |
+| `LOG_LEVEL`                | `info`   | `debug`, `info`, `warn`, or `error`                        |
+| `ENVIRONMENT`              | `local`  | `local`, `development`, `test`, `staging`, or `production` |
+| `SHUTDOWN_TIMEOUT`         | `50s`    | Greater than zero and no more than 5 minutes               |
+| `HTTP_READ_HEADER_TIMEOUT` | `5s`     | Greater than zero and no more than 5 minutes               |
+| `HTTP_READ_TIMEOUT`        | `15s`    | Greater than zero and no more than 5 minutes               |
+| `HTTP_WRITE_TIMEOUT`       | `15s`    | Greater than zero and no more than 5 minutes               |
+| `HTTP_IDLE_TIMEOUT`        | `60s`    | Greater than zero and no more than 5 minutes               |
+
+Duration values use Go duration syntax, such as `500ms`, `10s`, or `1m`. See
+`.env.example` for a local template. The service reports invalid variable names and
+expected formats without echoing their values.
+
 ## Testing strategy
 
 - Unit tests cover configuration, domain validation, money rules, and calculations.

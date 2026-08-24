@@ -13,15 +13,13 @@ baseline before adding business features.
 
 ### Acceptance criteria
 
-- [ ] A Go module is initialized using the repository's agreed module path and a
+- [x] A Go module is initialized using the repository's agreed module path and a
       supported, explicitly declared Go version.
-- [ ] `main` only performs composition and lifecycle management; business rules are
+- [x] `main` only performs composition and lifecycle management; business rules are
       not implemented in the entry point.
-- [ ] The service builds with `go build ./...` and tests with `go test ./...`.
-- [ ] `.gitignore`, `README.md`, and an example environment file are
+- [x] The service builds with `go build ./...` and tests with `go test ./...`.
+- [x] `.gitignore`, `README.md`, and an example environment file are
       present; real secrets and local environment files are ignored.
-- [ ] A task runner (`Makefile` or equivalent) exposes consistent `build`, `test`,
-      `lint`, `run`, and `migrate` commands.
 
 ### Verification
 
@@ -39,16 +37,16 @@ Run the documented bootstrap commands from a clean clone with only Go installed.
 
 ### Acceptance criteria
 
-- [ ] Configuration is read from environment variables and includes HTTP address,
+- [x] Configuration is read from environment variables and includes HTTP address,
       log level, environment, shutdown timeout, service name, and service version.
-- [ ] Optional values have documented, safe local defaults.
-- [ ] Required values are validated at startup with actionable errors that do not
+- [x] Optional values have documented, safe local defaults.
+- [x] Required values are validated at startup with actionable errors that do not
       expose secret values.
-- [ ] The HTTP server defines explicit read-header, read, write, and idle timeouts.
-- [ ] The process handles `SIGINT` and `SIGTERM`.
-- [ ] On shutdown, the server stops accepting new requests and gives in-flight
+- [x] The HTTP server defines explicit read-header, read, write, and idle timeouts.
+- [x] The process handles `SIGINT` and `SIGTERM`.
+- [x] On shutdown, the server stops accepting new requests and gives in-flight
       requests a bounded period to finish.
-- [ ] Unit tests cover valid, missing, malformed, and unsafe configuration.
+- [x] Unit tests cover valid, missing, malformed, and unsafe configuration.
 
 ---
 
