@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ledger-postgres
+  labels:
+    app.kubernetes.io/name: ledger-postgres
+    app.kubernetes.io/component: database
+spec:
+  selector:
+    app.kubernetes.io/name: ledger-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

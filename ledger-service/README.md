@@ -165,27 +165,48 @@ finish, flushes telemetry, and closes its PostgreSQL connection pool.
 
 ### Configuration
 
-Configuration is read from environment variables at startup. `SERVICE_NAME` and
-`SERVICE_VERSION` are required. All other values are optional and use the safe local
-defaults below when unset; every default can be overridden through its environment
-variable.
+Configuration is read from environment variables at startup. `SERVICE_NAME`,
+`SERVICE_VERSION`, and `DATABASE_URL` are required. All other values are optional and
+use the conservative defaults below when unset; every default can be overridden
+through its environment variable.
 
-|          Variable          | Default  |                      Validation                            |
-|----------------------------|----------|------------------------------------------------------------|
-| `SERVICE_NAME`             | required | Single-line identifier, at most 128 characters             |
-| `SERVICE_VERSION`          | required | Single-line identifier, at most 128 characters             |
-| `HTTP_ADDRESS`             | `localhost:8080`  | `host:port`, with port 1–65535                    |
-| `LOG_LEVEL`                | `info`   | `debug`, `info`, `warn`, or `error`                        |
-| `ENVIRONMENT`              | `local`  | `local`, `development`, `test`, `staging`, or `production` |
-| `SHUTDOWN_TIMEOUT`         | `50s`    | Greater than zero and no more than 5 minutes               |
-| `HTTP_READ_HEADER_TIMEOUT` | `5s`     | Greater than zero and no more than 5 minutes               |
-| `HTTP_READ_TIMEOUT`        | `15s`    | Greater than zero and no more than 5 minutes               |
-| `HTTP_WRITE_TIMEOUT`       | `15s`    | Greater than zero and no more than 5 minutes               |
-| `HTTP_IDLE_TIMEOUT`        | `60s`    | Greater than zero and no more than 5 minutes               |
+|            Variable           | Default  |                      Validation                            |
+|-------------------------------|----------|------------------------------------------------------------|
+| `SERVICE_NAME`                | required | Single-line identifier, at most 128 characters             |
+| `SERVICE_VERSION`             | required | Single-line identifier, at most 128 characters             |
+| `HTTP_ADDRESS`                | `:8080`  | `host:port`, with port 1–65535                             |
+| `LOG_LEVEL`                   | `info`   | `debug`, `info`, `warn`, or `error`                        |
+| `ENVIRONMENT`                 | `local`  | `local`, `development`, `test`, `staging`, or `production` |
+| `SHUTDOWN_TIMEOUT`            | `10s`    | Greater than zero and no more than 5 minutes               |
+| `HTTP_READ_HEADER_TIMEOUT`    | `5s`     | Greater than zero and no more than 5 minutes               |
+| `HTTP_READ_TIMEOUT`           | `15s`    | Greater than zero and no more than 5 minutes               |
+| `HTTP_WRITE_TIMEOUT`          | `15s`    | Greater than zero and no more than 5 minutes               |
+| `HTTP_IDLE_TIMEOUT`           | `60s`    | Greater than zero and no more than 5 minutes               |
+| `DATABASE_URL`                | required | PostgreSQL URL containing user, host, and database name    |
+| `DB_MAX_CONNECTIONS`          | `10`     | Integer from 1 through 100                                 |
+| `DB_MIN_CONNECTIONS`          | `1`      | Integer from 0 through `DB_MAX_CONNECTIONS`                |
+| `DB_MAX_CONNECTION_LIFETIME`  | `30m`    | Greater than zero and no more than 24 hours                |
+| `DB_MAX_CONNECTION_IDLE_TIME` | `5m`     | Greater than zero and no more than 24 hours                |
+| `DB_HEALTH_CHECK_PERIOD`      | `30s`    | Greater than zero and no more than 5 minutes               |
+| `DB_CONNECT_TIMEOUT`          | `5s`     | Per-attempt timeout greater than zero and at most 5 minute |
+| `DB_CONNECT_MAX_ATTEMPTS`     | `5`      | Integer from 1 through 20                                  |
+| `DB_CONNECT_RETRY_DELAY`      | `2s`     | Greater than zero and no more than 5 minutes               |
 
 Duration values use Go duration syntax, such as `500ms`, `10s`, or `1m`. See
 `.env.example` for a local template. The service reports invalid variable names and
 expected formats without echoing their values.
+
+### Local PostgreSQL
+
+Local PostgreSQL runs exclusively in Kubernetes; Docker Compose is not required. The
+manifests, development-only credentials, and commands to create, verify, stop, and
+restart the database are documented in [`../database/README.md`](../database/README.md).
+
+Before running the service directly on the host, start the documented port-forward
+and load `.env.example`. A service deployed inside the cluster instead uses
+`ledger-postgres:5432` in `DATABASE_URL`. Startup does not accept HTTP traffic until
+the PostgreSQL pool has connected successfully. Connection attempts and their timeout
+are bounded; if PostgreSQL remains unavailable, the process exits with an error.
 
 ## Testing strategy
 

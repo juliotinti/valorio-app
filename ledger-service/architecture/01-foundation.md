@@ -60,9 +60,11 @@ Run the documented bootstrap commands from a clean clone with only Go installed.
 
 ### Acceptance criteria
 
-- [ ] Docker starts PostgreSQL with a health check, named volume, and a
-      dedicated `ledger_db` database and least-privilege application user.
-- [ ] Create a kubernetes yaml for ledger PostgreSQL.
+- [ ] Kubernetes starts PostgreSQL as a single-replica `StatefulSet` with health
+      probes, persistent storage, a dedicated `ledger_db` database, and a
+      least-privilege application user.
+- [ ] PostgreSQL manifests live under the root `database/ledger-postgres` directory with
+      development configuration supplied by the local Kustomize overlay.
 - [ ] Credentials are configurable and development defaults are clearly marked as
       non-production values.
 - [ ] The service waits for a usable connection with bounded retries and exits when

@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ledger-postgres
+  labels:
+    app.kubernetes.io/name: ledger-postgres
+    app.kubernetes.io/component: database
+spec:
+  serviceName: ledger-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ledger-postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ledger-postgres
+        app.kubernetes.io/component: database
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: postgres
+          image: postgres:17.11-alpine3.24
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-postgres-credentials
+                  key: POSTGRES_ADMIN_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-postgres-credentials
+                  key: POSTGRES_ADMIN_PASSWORD
+            - name: LEDGER_APP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-postgres-credentials
+                  key: LEDGER_APP_USER
+            - name: LEDGER_APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-postgres-credentials
+                  key: LEDGER_APP_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -ec
+                - pg_isready --username="$POSTGRES_USER" --dbname=postgres
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -ec
+                - pg_isready --username="$POSTGRES_USER" --dbname=ledger_db
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -ec
+                - pg_isready --username="$POSTGRES_USER" --dbname=postgres
+            failureThreshold: 6
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: init
+              mountPath: /docker-entrypoint-initdb.d/01-create-ledger-database.sh
+              subPath: 01-create-ledger-database.sh
+              readOnly: true
+      volumes:
+        - name: init
+          configMap:
+            name: ledger-postgres-init
+            defaultMode: 0555
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

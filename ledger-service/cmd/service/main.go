@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/juliotinti/valorio-app/valorio/ledger-service/internal/config"
+	"github.com/juliotinti/valorio-app/valorio/ledger-service/internal/database"
 	"github.com/juliotinti/valorio-app/valorio/ledger-service/internal/httpserver"
 )
 
@@ -30,6 +31,12 @@ func run() error {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	pool, err := database.Open(ctx, cfg, logger)
+	if err != nil {
+		return err
+	}
+	defer pool.Close()
 
 	handler := http.NewServeMux()
 	return httpserver.Run(ctx, cfg, handler, logger.With(
