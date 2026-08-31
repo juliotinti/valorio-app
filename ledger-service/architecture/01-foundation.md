@@ -60,22 +60,22 @@ Run the documented bootstrap commands from a clean clone with only Go installed.
 
 ### Acceptance criteria
 
-- [ ] Kubernetes starts PostgreSQL as a single-replica `StatefulSet` with health
+- [x] Kubernetes starts PostgreSQL as a single-replica `StatefulSet` with health
       probes, persistent storage, a dedicated `ledger_db` database, and a
       least-privilege application user.
-- [ ] PostgreSQL manifests live under the root `database/ledger-postgres` directory with
+- [x] PostgreSQL manifests live under the root `database/ledger-postgres` directory with
       development configuration supplied by the local Kustomize overlay.
-- [ ] Credentials are configurable and development defaults are clearly marked as
+- [x] Credentials are configurable and development defaults are clearly marked as
       non-production values.
-- [ ] The service waits for a usable connection with bounded retries and exits when
+- [x] The service waits for a usable connection with bounded retries and exits when
       the database remains unavailable.
-- [ ] Connection-pool limits and lifetimes are configurable with conservative
+- [x] Connection-pool limits and lifetimes are configurable with conservative
       defaults appropriate for a small service.
-- [ ] A documented command starts, verifies, and stops the database without deleting
+- [x] A documented command starts, verifies, and stops the database without deleting
       its volume by default.
-- [ ] `DATABASE_URL` is introduced and validated as part of the PostgreSQL
+- [x] `DATABASE_URL` is introduced and validated as part of the PostgreSQL
       integration.
-- [ ] The database connection pool is initialized during startup and closed
+- [x] The database connection pool is initialized during startup and closed
       during graceful shutdown.
 
 ---
